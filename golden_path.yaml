@@ -1,1 +1,42 @@
-
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: myfirstemplate
+  title: My first Template
+  description: Create a simple Quarkus Application
+spec:
+  owner: service@example.com
+  type: service
+  parameters:
+    - title: Provide Information for Application
+      required:
+        - component_id
+        - owner
+        - java_package_name
+      properties:
+        component_id:
+          title: Name
+          type: string
+          description: Unique name of the component
+          default: my-quarkus-app
+          ui:field: EntityNamePicker
+  steps:
+    - id: template
+      name: Generating component
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutTemplating:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          namespace: ${{ parameters.component_id }}-dev
+          description: ${{ parameters.description }}
+          group_id: ${{ parameters.group_id }}
+          artifact_id: ${{ parameters.artifact_id }}
+          java_package_name: ${{ parameters.java_package_name }}
+          owner: ${{ parameters.owner }}
+          cluster: .apps.cluster-xxxxx.xxxxx.sandbox123.opentlc.com
+          destination: ${{ (parameters.repoUrl | parseRepoUrl).owner }}/${{ (parameters.repoUrl | parseRepoUrl).repo }}
+          quay_destination: ${{ parameters.image_organization }}/${{ parameters.component_id }}
+          port: 8080
