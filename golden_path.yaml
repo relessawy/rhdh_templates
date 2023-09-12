@@ -11,23 +11,15 @@ spec:
     - title: Provide Information for Application
       required:
         - component_id
-        - owner
         - java_package_name
-        - orgName
-        - repoName
       properties:
-        orgName:
-          title: Organization Name
-          type: string
-        repoName:
-          title: Repository Name
-          type: string
         component_id:
           title: Name
           type: string
           description: Unique name of the component
           default: my-first-app
           ui:field: EntityNamePicker
+          maxLength: 14
         group_id:
           title: Group Id
           type: string
@@ -43,18 +35,20 @@ spec:
           default: org.redhat.janus
           type: string
           description: Name for the java package. eg (com.redhat.blah)
+        host:
+              title: Repo Host
+              type: string
+              description: Your SCM host
+              default: gitlab-gitlab.apps.cluster-jqxpz.sandbox744.opentlc.com
+              enum:
+                - gitlab-gitlab.apps.cluster-jqxpz.sandbox744.opentlc.com
         owner:
-          title: Owner
-          type: string
-          description: IdP owner of the component
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Group
-    - title: Provide Image Registry Information
-      required:
-        - image_registry
-      properties:
+              title: Repo Owner
+              type: string
+              description: Your SCM host organization/group
+              default: rhdh
+              enum:
+                - rhdh
         image_registry:
           title: Image Registry
           type: string
@@ -62,29 +56,30 @@ spec:
           default: image-registry.openshift-image-registry.svc:5000
   steps:
     - id: template
-      name: Generating Application Code from Application Manifest
+      name:  Generate Application Code from Application Manifest
       action: fetch:template
       input:
         url: ./skeleton
-        copyWithoutTemplating:
+        copyWithoutRender:
           - .github/workflows/*
         values:
           component_id: ${{ parameters.component_id }}
-          namespace: ${{ parameters.component_id }}-dev
           description: ${{ parameters.description }}
+          namespace: ${{ parameters.component_id }}-dev
           group_id: ${{ parameters.group_id }}
           artifact_id: ${{ parameters.artifact_id }}
           java_package_name: ${{ parameters.java_package_name }}
-          owner: ${{ parameters.owner }}
-          cluster: .apps.cluster-xxxxx.xxxxx.sandbox123.opentlc.com
-          destination: ${{ (parameters.repoUrl | parseRepoUrl).owner }}/${{ (parameters.repoUrl | parseRepoUrl).repo }}
-          quay_destination: ${{ parameters.image_organization }}/${{ parameters.component_id }}
+          owner: dev-user
+          cluster: .apps.cluster-jqxpz.sandbox744.opentlc.com
+          host: ${{ parameters.repo.host }}
+          destination: ${{ parameters.repo.owner }}/${{ parameters.component_id }}
+          quay_destination: ${{ parameters.image_organization}}/${{ parameters.component_id }}
           port: 8080
     - id: publish
-      name: Publishing to the Source Code Repository
-      action: publish:github
+      name: Publish
+      action: publish:gitlab
       input:
-        allowedHosts: ['github.com']
-        description: ${{ parameters.description }}
-        repoUrl: github.com?owner=${{ parameters.orgName }}&repo=${{ parameters.repoName }}
-        defaultBranch: main
+        repoUrl: "${{ parameters.repo.host }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.component_id}}"
+        repoVisibility: public
+
+
