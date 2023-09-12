@@ -55,6 +55,11 @@ spec:
           description: Host for storing image
           default: image-registry.openshift-image-registry.svc:5000
   steps:
+    - id: log-message
+      name: Log Message
+      action: debug:log
+      input:
+        message: "Repo: ${{ parameters.host }}?owner=${{ parameters.owner }}&repo=${{parameters.component_id}}"
     - id: template
       name:  Generate Application Code from Application Manifest
       action: fetch:template
