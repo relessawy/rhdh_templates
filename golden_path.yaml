@@ -60,31 +60,6 @@ spec:
       action: debug:log
       input:
         message: "Repo: ${{ parameters.host }}?owner=${{ parameters.owner }}&repo=${{parameters.component_id}}"
-    - id: template
-      name:  Generate Application Code from Application Manifest
-      action: fetch:template
-      input:
-        url: ./skeleton
-        copyWithoutRender:
-          - .github/workflows/*
-        values:
-          component_id: ${{ parameters.component_id }}
-          description: ${{ parameters.description }}
-          namespace: ${{ parameters.component_id }}-dev
-          group_id: ${{ parameters.group_id }}
-          artifact_id: ${{ parameters.artifact_id }}
-          java_package_name: ${{ parameters.java_package_name }}
-          owner: dev-user
-          cluster: .apps.cluster-jqxpz.sandbox744.opentlc.com
-          host: ${{ parameters.repo.host }}
-          destination: ${{ parameters.repo.owner }}/${{ parameters.component_id }}
-          quay_destination: ${{ parameters.image_organization}}/${{ parameters.component_id }}
-          port: 8080
-    - id: publish
-      name: Publish
-      action: publish:gitlab
-      input:
-        repoUrl: "${{ parameters.host }}?owner=${{ parameters.owner }}&repo=${{parameters.component_id}}"
-        repoVisibility: public
+    
 
 
