@@ -13,7 +13,15 @@ spec:
         - component_id
         - owner
         - java_package_name
+        - orgName
+        - repoName
       properties:
+        orgName:
+          title: Organization Name
+          type: string
+        repoName:
+          title: Repository Name
+          type: string
         component_id:
           title: Name
           type: string
@@ -43,10 +51,6 @@ spec:
           ui:options:
             allowedKinds:
               - Group
-        description:
-          title: Description
-          type: string
-          description: Help others understand what this website is for.
     - title: Provide Image Registry Information
       required:
         - image_registry
@@ -56,17 +60,6 @@ spec:
           type: string
           description: Host for storing image
           default: image-registry.openshift-image-registry.svc:5000
-    - title: Application repository Information
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
-          type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com    
   steps:
     - id: template
       name: Generating Application Code from Application Manifest
