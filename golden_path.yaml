@@ -11,7 +11,7 @@ metadata:
     - argocd
     - tekton
 spec:
-  owner: service@example.com
+  owner: Platform Engineering Team
   type: service
   parameters:
     - title: Provide Information for Application
