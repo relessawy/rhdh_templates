@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: myfirstemplate
-  title: My first Template
-  description: Create a simple Quarkus Application
+  title: My first Golden Path Template
+  description: Create a golden path from Dev to Prod
 spec:
   owner: service@example.com
   type: service
