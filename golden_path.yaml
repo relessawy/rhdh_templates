@@ -4,6 +4,12 @@ metadata:
   name: myfirstemplate
   title: My first Golden Path Template
   description: Create a golden path from Dev to Prod
+  tags:
+    - github
+    - quarkus
+    - maven
+    - argocd
+    - tekton
 spec:
   owner: service@example.com
   type: service
